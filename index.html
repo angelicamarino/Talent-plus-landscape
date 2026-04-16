@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talent+ : The landscape</title>
+<style>
+  :root {
+    --text-primary: #1a1a1a;
+    --text-secondary: #5a5a5a;
+    --text-tertiary: #8a8a8a;
+    --text-info: #185FA5;
+    --text-retire: #9a9a9a;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f6f5f1;
+    --border-tertiary: rgba(0, 0, 0, 0.12);
+    --border-secondary: rgba(0, 0, 0, 0.24);
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 3.5rem 2rem 5rem;
+  }
+
+  /* Byline */
+  .byline {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 0 0 3rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .byline-divider { color: var(--border-secondary); }
+
+  /* Wordmark (brand logo above title) */
+  .wordmark {
+    display: block;
+    margin: 0 0 1.25rem;
+    line-height: 0;
+  }
+  .wordmark img {
+    display: block;
+    height: 44px;
+    width: auto;
+    max-width: 100%;
+  }
+
+  /* Title */
+  .title {
+    font-size: 34px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem;
+    line-height: 1.15;
+  }
+  .title .plus {
+    color: var(--text-info);
+  }
+  .subtitle {
+    font-size: 17px;
+    color: var(--text-secondary);
+    margin: 0 0 2.5rem;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  /* Prose */
+  .prose {
+    font-size: 16px;
+    color: var(--text-primary);
+    line-height: 1.7;
+    margin: 0 0 2.5rem;
+  }
+  .prose p {
+    margin: 0 0 1.1rem;
+  }
+  .prose p:last-child {
+    margin-bottom: 0;
+  }
+  .prose em {
+    font-style: italic;
+    color: var(--text-primary);
+  }
+
+  /* Map wrapper */
+  .map-wrapper {
+    margin: 1.5rem 0 3rem;
+  }
+  .map-state-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    padding: 4px 10px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    margin: 0 0 0.5rem;
+  }
+  .map-state-label.future {
+    color: var(--text-info);
+    background: rgba(24, 95, 165, 0.08);
+  }
+  .map-caption {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0 0 1.25rem;
+    line-height: 1.5;
+  }
+
+  /* Map */
+  .tp-map {
+    position: relative;
+    height: 460px;
+    margin: 0 0 1rem;
+  }
+  .tp-edges {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .tp-edge {
+    stroke: var(--border-secondary);
+    stroke-width: 0.75;
+    fill: none;
+    stroke-dasharray: 2 3;
+    opacity: 0.7;
+  }
+  .tp-node {
+    position: absolute;
+    background: var(--bg-primary);
+    border: 0.5px solid var(--border-secondary);
+    border-radius: var(--radius-lg);
+    padding: 0.875rem 1.125rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+    z-index: 2;
+    width: 170px;
+    text-align: center;
+    font-family: var(--font-sans);
+  }
+  .tp-node:hover,
+  .tp-node.active {
+    border-color: var(--text-info);
+    z-index: 4;
+  }
+  .tp-node-name {
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .tp-node-function {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin: 3px 0 0;
+    letter-spacing: 0.02em;
+  }
+  .tp-node-badge {
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-primary);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    padding: 0 6px;
+    text-transform: uppercase;
+  }
+  .tp-node-badge.new {
+    color: var(--text-info);
+  }
+  .tp-node-badge.retiring {
+    color: var(--text-retire);
+  }
+  .tp-node-retiring .tp-node-name,
+  .tp-node-retiring .tp-node-function {
+    color: var(--text-retire);
+  }
+  .tp-node-retiring {
+    border-style: dashed;
+    border-color: var(--border-tertiary);
+  }
+
+  /* Today map: equal card footprint, default outline on hover/active (no blue) */
+  #map-today .tp-node {
+    min-height: 102px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  #map-today .tp-node:hover,
+  #map-today .tp-node.active {
+    border-color: var(--border-secondary);
+    z-index: 2;
+  }
+  #map-today .tp-node-retiring:hover,
+  #map-today .tp-node-retiring.active {
+    border-color: var(--border-tertiary);
+  }
+  #map-today .tp-node:focus {
+    outline: none;
+  }
+  #map-today .tp-node:focus-visible {
+    outline: 2px solid var(--border-secondary);
+    outline-offset: 2px;
+  }
+
+  /* Positions */
+  .pos-center {
+    top: 185px;
+    left: 50%;
+    margin-left: -85px;
+  }
+  .pos-center-large {
+    top: 175px;
+    left: 50%;
+    margin-left: -85px;
+    z-index: 3;
+    padding: 1.125rem 1.5rem;
+    border-width: 0.75px;
+    width: 170px;
+  }
+  .pos-center-large .tp-node-name {
+    font-size: 20px;
+  }
+  .pos-top-left { top: 40px; left: 20px; }
+  .pos-top-right { top: 40px; right: 20px; }
+  .pos-top-center {
+    top: 40px;
+    left: 50%;
+    margin-left: -85px;
+  }
+  .pos-bottom-center {
+    top: 370px;
+    left: 50%;
+    margin-left: -85px;
+  }
+
+  /* Square layout positions (used on Today map) */
+  .pos-sq-tl { top: 60px; left: 110px; }
+  .pos-sq-tr { top: 60px; right: 110px; }
+  .pos-sq-bl { top: 270px; left: 110px; }
+  .pos-sq-br { top: 270px; right: 110px; }
+
+  /* Detail panel */
+  .tp-detail {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 1.75rem;
+    min-height: 140px;
+    transition: all 0.2s ease;
+  }
+  .tp-detail-empty {
+    color: var(--text-tertiary);
+    font-size: 13px;
+    font-style: italic;
+    margin: 0;
+  }
+  .tp-detail-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin: 0 0 0.75rem;
+    flex-wrap: wrap;
+  }
+  .tp-detail-name {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .tp-detail-function {
+    font-size: 12px;
+    color: var(--text-secondary);
+    letter-spacing: 0.02em;
+  }
+  .tp-detail-desc {
+    font-size: 14px;
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin: 0 0 0.75rem;
+  }
+  .tp-detail-meta {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .tp-detail-meta strong {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  /* Section header */
+  .section-header {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin: 3.5rem 0 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 0.5px solid var(--border-tertiary);
+  }
+
+  /* Change list */
+  .change-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .change-item {
+    padding: 1rem 0;
+    border-bottom: 0.5px solid var(--border-tertiary);
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 1.5rem;
+    align-items: baseline;
+  }
+  .change-item:last-child {
+    border-bottom: none;
+  }
+  .change-label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  .change-label-new {
+    color: var(--text-info);
+  }
+  .change-body {
+    font-size: 14px;
+    color: var(--text-primary);
+    line-height: 1.55;
+  }
+  .fname {
+    color: var(--text-tertiary);
+    font-size: 0.92em;
+    font-weight: 400;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 5rem;
+    padding-top: 1.5rem;
+    border-top: 0.5px solid var(--border-tertiary);
+    font-size: 12px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.02em;
+  }
+
+  /* Responsive */
+  @media (max-width: 680px) {
+    .page {
+      padding: 2.5rem 1.25rem 4rem;
+    }
+    .title {
+      font-size: 28px;
+    }
+    .subtitle {
+      font-size: 15px;
+    }
+    .tp-node {
+      width: 140px;
+    }
+    .pos-center-large {
+      width: 150px;
+      margin-left: -75px;
+    }
+    .pos-center { margin-left: -70px; }
+    .pos-top-center { margin-left: -70px; }
+    .pos-bottom-center { margin-left: -70px; }
+    .pos-top-left { left: 10px; }
+    .pos-top-right { right: 10px; }
+    .pos-sq-tl { left: 15px; }
+    .pos-sq-tr { right: 15px; }
+    .pos-sq-bl { left: 15px; }
+    .pos-sq-br { right: 15px; }
+    #map-today .tp-node {
+      min-height: 96px;
+    }
+    .change-item {
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="byline">
+    <span>Angelica Gandrup-Marino</span>
+    <span class="byline-divider">·</span>
+    <span>Digitalization Lead</span>
+    <span class="byline-divider">·</span>
+    <span>April 2026</span>
+  </div>
+
+  <div class="wordmark">
+    <img src="talent-plus-logo.png" width="375" height="120" alt="Talent+" decoding="async">
+  </div>
+  <h1 class="title">Talent<span class="plus">+</span></h1>
+  <p class="subtitle">UNOPS's talent technology, and how the pieces fit together.</p>
+
+  <div class="prose">
+    <p>Talent+ is the name we use for UNOPS's talent technology. It is not itself a system. It is a family of systems, each serving a distinct purpose, that together support how UNOPS attracts, selects, and integrates talent.</p>
+    <p>Each component in Talent+ has a short name and a system name. The short name, like People or Careers, describes what the component is about and is how we will refer to things going forward. The system name, like Talent Workspace or Career Marketplace, identifies the platform you may already know.</p>
+    <p>The landscape is changing. The maps below show where we are today, and where we will be at launch.</p>
+  </div>
+
+  <!-- TODAY MAP -->
+  <div class="map-wrapper">
+    <span class="map-state-label">Today</span>
+    <p class="map-caption">Four systems in the Talent+ family.</p>
+
+    <div class="tp-map" id="map-today">
+      <svg class="tp-edges" id="today-edges-svg" viewBox="0 0 680 460" preserveAspectRatio="xMidYMid meet">
+        <path id="today-square-path" class="tp-edge" d="" />
+      </svg>
+
+      <div class="tp-node pos-sq-tl" data-id="careers-t">
+        <p class="tp-node-name">Careers</p>
+        <p class="tp-node-function">Career Marketplace</p>
+      </div>
+
+      <div class="tp-node pos-sq-tr tp-node-retiring" data-id="hmp-t">
+        <span class="tp-node-badge retiring">Retiring</span>
+        <p class="tp-node-name">Hire</p>
+        <p class="tp-node-function">HM Portal</p>
+      </div>
+
+      <div class="tp-node pos-sq-bl" data-id="recruit-t">
+        <p class="tp-node-name">Recruit</p>
+        <p class="tp-node-function">HR Portal</p>
+      </div>
+
+      <div class="tp-node pos-sq-br" data-id="join-t">
+        <p class="tp-node-name">Join</p>
+        <p class="tp-node-function">Onboarding Platform</p>
+      </div>
+    </div>
+
+    <div class="tp-detail" id="detail-today">
+      <p class="tp-detail-empty">Hover a system to see more.</p>
+    </div>
+  </div>
+
+  <!-- AT LAUNCH MAP -->
+  <div class="map-wrapper">
+    <span class="map-state-label future">At launch</span>
+    <p class="map-caption">People joins the family. The Hiring Manager Portal retires. Hiring managers move into People alongside HR.</p>
+
+    <div class="tp-map" id="map-future">
+      <svg class="tp-edges" viewBox="0 0 680 460" preserveAspectRatio="none">
+        <path class="tp-edge" d="M 170 97 Q 250 170 300 200" />
+        <path class="tp-edge" d="M 510 97 Q 430 170 380 200" />
+        <path class="tp-edge" d="M 340 270 L 340 370" />
+      </svg>
+
+      <div class="tp-node pos-top-left" data-id="careers-f">
+        <p class="tp-node-name">Careers</p>
+        <p class="tp-node-function">Career Marketplace</p>
+      </div>
+
+      <div class="tp-node pos-top-right" data-id="recruit-f">
+        <p class="tp-node-name">Recruit</p>
+        <p class="tp-node-function">HR Portal</p>
+      </div>
+
+      <div class="tp-node pos-center-large" data-id="people-f">
+        <span class="tp-node-badge new">New</span>
+        <p class="tp-node-name">People</p>
+        <p class="tp-node-function">Talent Workspace</p>
+      </div>
+
+      <div class="tp-node pos-bottom-center" data-id="join-f">
+        <p class="tp-node-name">Join</p>
+        <p class="tp-node-function">Onboarding Platform</p>
+      </div>
+    </div>
+
+    <div class="tp-detail" id="detail-future">
+      <p class="tp-detail-empty">Hover a system to see more.</p>
+    </div>
+  </div>
+
+  <div class="section-header">What's changing</div>
+
+  <ul class="change-list">
+    <li class="change-item">
+      <span class="change-label change-label-new">Launching Q4 2026</span>
+      <div class="change-body">
+        People <span class="fname">Talent Workspace</span> joins the Talent+ family as the workspace where HR practitioners and hiring managers find, evaluate, and select talent. Internal candidates explore their next role here.
+      </div>
+    </li>
+    <li class="change-item">
+      <span class="change-label">Retiring</span>
+      <div class="change-body">
+        The Hiring Manager Portal is being retired. Hiring managers will work directly in People, with the right visibility for their role.
+      </div>
+    </li>
+    <li class="change-item">
+      <span class="change-label">Continuing</span>
+      <div class="change-body">
+        Careers <span class="fname">Career Marketplace</span>, Recruit <span class="fname">HR Portal</span>, and Join <span class="fname">Onboarding Platform</span> continue as they are. The family grows. The existing systems stay in place.
+      </div>
+    </li>
+  </ul>
+
+  <div class="footer">
+    UNOPS · Talent+ landscape · April 2026
+  </div>
+
+</div>
+
+<script>
+(function() {
+  const details = {
+    'careers-t': {
+      name: 'Careers',
+      fn: 'Career Marketplace',
+      desc: 'Where external candidates discover UNOPS opportunities, apply to vacancies, and join the talent community.',
+      meta: '<strong>Notable:</strong> the talent community, a standing pool of registered candidates who signal continued interest in UNOPS.'
+    },
+    'hmp-t': {
+      name: 'Hire',
+      fn: 'HM Portal',
+      desc: 'Today, this is where hiring managers view their recruitments and review candidates sent to them by HR.',
+      meta: '<strong>At launch:</strong> the Hiring Manager Portal retires. Hiring managers will work directly in People alongside HR.'
+    },
+    'recruit-t': {
+      name: 'Recruit',
+      fn: 'HR Portal',
+      desc: 'Where the formal recruitment process is managed and recorded. Vacancy setup, application progression, and the compliance trail.',
+      meta: '<strong>The system of record</strong> for formal recruitments.'
+    },
+    'join-t': {
+      name: 'Join',
+      fn: 'Onboarding Platform',
+      desc: 'Where new hires become part of UNOPS. Administrative onboarding, orientation, and integration.',
+      meta: '<strong>Where selected candidates become UNOPS personnel.</strong>'
+    },
+    'careers-f': {
+      name: 'Careers',
+      fn: 'Career Marketplace',
+      desc: 'Where external candidates discover UNOPS opportunities, apply to vacancies, and join the talent community.',
+      meta: '<strong>Notable:</strong> the talent community is a key source feeding People.'
+    },
+    'people-f': {
+      name: 'People',
+      fn: 'Talent Workspace',
+      desc: 'Where HR practitioners and hiring managers find, evaluate, and select talent. Internal candidates explore opportunities here.',
+      meta: '<strong>The center of the landscape.</strong> Draws from the talent community, internal UNOPS personnel, and endorsed candidate pools. Selections move into Recruit when they become formal.'
+    },
+    'recruit-f': {
+      name: 'Recruit',
+      fn: 'HR Portal',
+      desc: 'Where the formal recruitment process is managed and recorded. Vacancy setup, application progression, and the compliance trail.',
+      meta: '<strong>The system of record</strong> for formal recruitments. Closely paired with People, where the work around each recruitment happens.'
+    },
+    'join-f': {
+      name: 'Join',
+      fn: 'Onboarding Platform',
+      desc: 'Where new hires become part of UNOPS. Administrative onboarding, orientation, and integration.',
+      meta: '<strong>Where selected candidates become UNOPS personnel.</strong>'
+    }
+  };
+
+  function setupMap(mapId, detailId) {
+    const detailEl = document.getElementById(detailId);
+    const nodes = document.querySelectorAll('#' + mapId + ' .tp-node');
+    const emptyState = '<p class="tp-detail-empty">Hover a system to see more.</p>';
+
+    function render(id) {
+      const d = details[id];
+      if (!d) { detailEl.innerHTML = emptyState; return; }
+      detailEl.innerHTML =
+        '<div class="tp-detail-header">' +
+          '<h3 class="tp-detail-name">' + d.name + '</h3>' +
+          '<span class="tp-detail-function">' + d.fn + '</span>' +
+        '</div>' +
+        '<p class="tp-detail-desc">' + d.desc + '</p>' +
+        '<p class="tp-detail-meta">' + d.meta + '</p>';
+    }
+
+    nodes.forEach(function(n) {
+      n.addEventListener('mouseenter', function() {
+        nodes.forEach(function(x) { x.classList.remove('active'); });
+        n.classList.add('active');
+        render(n.dataset.id);
+      });
+      n.addEventListener('click', function() {
+        nodes.forEach(function(x) { x.classList.remove('active'); });
+        n.classList.add('active');
+        render(n.dataset.id);
+      });
+    });
+  }
+
+  setupMap('map-today', 'detail-today');
+  setupMap('map-future', 'detail-future');
+
+  function updateTodaySquarePath() {
+    var map = document.getElementById('map-today');
+    if (!map) return;
+    var svg = document.getElementById('today-edges-svg');
+    var path = document.getElementById('today-square-path');
+    if (!svg || !path) return;
+
+    function centerOf(dataId) {
+      var el = map.querySelector('.tp-node[data-id="' + dataId + '"]');
+      if (!el) return null;
+      var er = el.getBoundingClientRect();
+      var mr = map.getBoundingClientRect();
+      return {
+        x: (er.left + er.right) / 2 - mr.left,
+        y: (er.top + er.bottom) / 2 - mr.top
+      };
+    }
+
+    var tl = centerOf('careers-t');
+    var tr = centerOf('hmp-t');
+    var br = centerOf('join-t');
+    var bl = centerOf('recruit-t');
+    if (!tl || !tr || !br || !bl) return;
+
+    var w = map.clientWidth;
+    var h = map.clientHeight;
+    if (w < 2 || h < 2) return;
+
+    svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+    path.setAttribute('d',
+      'M ' + tl.x + ' ' + tl.y +
+      ' L ' + tr.x + ' ' + tr.y +
+      ' L ' + br.x + ' ' + br.y +
+      ' L ' + bl.x + ' ' + bl.y + ' Z');
+  }
+
+  function scheduleTodaySquarePath() {
+    requestAnimationFrame(function() {
+      requestAnimationFrame(updateTodaySquarePath);
+    });
+  }
+
+  scheduleTodaySquarePath();
+  window.addEventListener('resize', scheduleTodaySquarePath);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(scheduleTodaySquarePath);
+  }
+})();
+</script>
+</body>
+</html>
