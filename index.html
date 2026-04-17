@@ -366,6 +366,24 @@
     color: var(--text-primary);
     line-height: 1.55;
   }
+  .change-list > .change-item:first-child .change-body strong {
+    color: var(--text-info);
+  }
+  .change-list > .change-item:first-child .change-body-lead {
+    margin: 0 0 0.5rem;
+  }
+  .change-list > .change-item:first-child .change-body-components {
+    margin: 0 0 0.65rem;
+    padding-left: 1.25rem;
+    color: var(--text-primary);
+    line-height: 1.55;
+  }
+  .change-list > .change-item:first-child .change-body-components li {
+    margin: 0.15rem 0;
+  }
+  .change-list > .change-item:first-child .change-body-follow {
+    margin: 0;
+  }
   .fname {
     color: var(--text-tertiary);
     font-size: 0.92em;
@@ -380,6 +398,60 @@
     font-size: 12px;
     color: var(--text-tertiary);
     letter-spacing: 0.02em;
+  }
+
+  /* Name legend (above Today) */
+  .component-legend {
+    width: 100%;
+    margin: 0 0 2.25rem;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 0.5px solid var(--border-tertiary);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--bg-primary);
+    table-layout: fixed;
+  }
+  .component-legend td {
+    vertical-align: middle;
+    text-align: center;
+    padding: 1rem 0.65rem;
+    border-right: 0.5px solid var(--border-tertiary);
+  }
+  .component-legend td:last-child {
+    border-right: none;
+  }
+  .component-legend-name {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .component-legend-function {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-tertiary);
+    margin: 0.4rem 0 0;
+    line-height: 1.35;
+  }
+  .component-legend-badge {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-info);
+    margin: 0 0 0.4rem;
+  }
+  .component-legend-note {
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--text-tertiary);
+    margin: 0.3rem 0 0;
+    line-height: 1.35;
   }
 
   /* Responsive */
@@ -416,6 +488,16 @@
       grid-template-columns: 1fr;
       gap: 0.35rem;
     }
+    .component-legend td {
+      padding: 0.75rem 0.4rem;
+    }
+    .component-legend-name {
+      font-size: 15px;
+    }
+    .component-legend-function,
+    .component-legend-note {
+      font-size: 11px;
+    }
   }
 </style>
 </head>
@@ -434,18 +516,44 @@
     <img src="talent-plus-logo.png" width="375" height="120" alt="Talent+" decoding="async">
   </div>
   <h1 class="title">Talent<span class="plus">+</span></h1>
-  <p class="subtitle">UNOPS's talent technology, and how the pieces fit together.</p>
+  <p class="subtitle">UNOPS&rsquo; talent technology and how the pieces fit together.</p>
 
   <div class="prose">
-    <p>Talent+ is the name we use for UNOPS's talent technology. It is not itself a system. It is a family of systems, each serving a distinct purpose, that together support how UNOPS attracts, selects, and integrates talent.</p>
-    <p>Each component in Talent+ has a short name and a system name. The short name, like People or Careers, describes what the component is about and is how we will refer to things going forward. The system name, like Talent Workspace or Career Marketplace, identifies the platform you may already know.</p>
-    <p>The landscape is changing. The maps below show where we are today, and where we will be at launch.</p>
+    <p>Talent+ is the name we use for UNOPS’ talent technology. It is not itself a system. It is a family of systems, each serving a distinct purpose, that together support how UNOPS attracts, selects, and integrates talent.</p>
+    <p>To date, each component in Talent+ has been referred to by a technical name. Moving forward, each component will have a descriptive name, like People or Careers, that describes what the component is. This is how we will refer to the component moving forward. The technical names, like Talent Workspace or Career Marketplace, may also be used to help and be clear about which component we are referring to. We can use the names interchangeably, but important to establish clarity now because&hellip;</p>
+    <p>The UNOPS Talent Technology landscape is changing&hellip;</p>
+    <p>The maps below show where we are today and where we will be at launch.</p>
   </div>
+
+  <table class="component-legend" aria-label="Descriptive names and technical names for Talent+ components">
+    <tbody>
+      <tr>
+        <td>
+          <p class="component-legend-name">Careers</p>
+          <p class="component-legend-function">Career Marketplace</p>
+        </td>
+        <td>
+          <p class="component-legend-name">Recruit</p>
+          <p class="component-legend-function">HR Portal</p>
+        </td>
+        <td>
+          <p class="component-legend-name">Join</p>
+          <p class="component-legend-function">Onboarding Platform</p>
+        </td>
+        <td>
+          <span class="component-legend-badge">New</span>
+          <p class="component-legend-name">People</p>
+          <p class="component-legend-function">Talent Workspace</p>
+          <p class="component-legend-note">(HM Portal)</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
   <!-- TODAY MAP -->
   <div class="map-wrapper">
     <span class="map-state-label">Today</span>
-    <p class="map-caption">Four systems in the Talent+ family.</p>
+    <p class="map-caption">Four components in the Talent+ family.</p>
 
     <div class="tp-map" id="map-today">
       <svg class="tp-edges" id="today-edges-svg" viewBox="0 0 680 460" preserveAspectRatio="xMidYMid meet">
@@ -475,14 +583,14 @@
     </div>
 
     <div class="tp-detail" id="detail-today">
-      <p class="tp-detail-empty">Hover a system to see more.</p>
+      <p class="tp-detail-empty">Hover over a component to see more.</p>
     </div>
   </div>
 
   <!-- AT LAUNCH MAP -->
   <div class="map-wrapper">
     <span class="map-state-label future">At launch</span>
-    <p class="map-caption">People joins the family. The Hiring Manager Portal retires. Hiring managers move into People alongside HR.</p>
+    <p class="map-caption">People joins the Talent Technology family. The Hiring Manager Portal retires.</p>
 
     <div class="tp-map" id="map-future">
       <svg class="tp-edges" viewBox="0 0 680 460" preserveAspectRatio="none">
@@ -514,7 +622,7 @@
     </div>
 
     <div class="tp-detail" id="detail-future">
-      <p class="tp-detail-empty">Hover a system to see more.</p>
+      <p class="tp-detail-empty">Hover over a component to see more.</p>
     </div>
   </div>
 
@@ -522,7 +630,20 @@
 
   <ul class="change-list">
     <li class="change-item">
-      <span class="change-label change-label-new">Launching Q4 2026</span>
+      <span class="change-label">Going forward</span>
+      <div class="change-body">
+        <p class="change-body-lead">Talent+ is UNOPS’ talent technology. It is made up of four components:</p>
+        <ul class="change-body-components">
+          <li><strong>Careers</strong> - Career Marketplace</li>
+          <li><strong>Recruit</strong> - HR Portal</li>
+          <li><strong>Join</strong> - Onboarding Platform</li>
+          <li><strong>People</strong> - Talent Workspace</li>
+        </ul>
+        <p class="change-body-follow">These are the names we will use going forward to refer to UNOPS’ talent technology.</p>
+      </div>
+    </li>
+    <li class="change-item">
+      <span class="change-label">Launching Q4 2026</span>
       <div class="change-body">
         People <span class="fname">Talent Workspace</span> joins the Talent+ family as the workspace where HR practitioners and hiring managers find, evaluate, and select talent. Internal candidates explore their next role here.
       </div>
@@ -553,7 +674,7 @@
     'careers-t': {
       name: 'Careers',
       fn: 'Career Marketplace',
-      desc: 'Where external candidates discover UNOPS opportunities, apply to vacancies, and join the talent community.',
+      desc: 'Where external candidates discover UNOPS’ opportunities, apply to vacancies, and join the talent community.',
       meta: '<strong>Notable:</strong> the talent community, a standing pool of registered candidates who signal continued interest in UNOPS.'
     },
     'hmp-t': {
@@ -577,7 +698,7 @@
     'careers-f': {
       name: 'Careers',
       fn: 'Career Marketplace',
-      desc: 'Where external candidates discover UNOPS opportunities, apply to vacancies, and join the talent community.',
+      desc: 'Where external candidates discover UNOPS’ opportunities, apply to vacancies, and join the talent community.',
       meta: '<strong>Notable:</strong> the talent community is a key source feeding People.'
     },
     'people-f': {
@@ -603,7 +724,7 @@
   function setupMap(mapId, detailId) {
     const detailEl = document.getElementById(detailId);
     const nodes = document.querySelectorAll('#' + mapId + ' .tp-node');
-    const emptyState = '<p class="tp-detail-empty">Hover a system to see more.</p>';
+    const emptyState = '<p class="tp-detail-empty">Hover over a component to see more.</p>';
 
     function render(id) {
       const d = details[id];
