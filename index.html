@@ -53,11 +53,13 @@
   }
   .byline-divider { color: var(--border-secondary); }
 
-  /* Wordmark (brand logo above title) */
+  /* Wordmark (logo as main heading) */
   .wordmark {
     display: block;
     margin: 0 0 1.25rem;
     line-height: 0;
+    font-size: 0;
+    font-weight: 400;
   }
   .wordmark img {
     display: block;
@@ -66,18 +68,6 @@
     max-width: 100%;
   }
 
-  /* Title */
-  .title {
-    font-size: 34px;
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    color: var(--text-primary);
-    margin: 0 0 0.25rem;
-    line-height: 1.15;
-  }
-  .title .plus {
-    color: var(--text-info);
-  }
   .subtitle {
     font-size: 17px;
     color: var(--text-secondary);
@@ -459,9 +449,6 @@
     .page {
       padding: 2.5rem 1.25rem 4rem;
     }
-    .title {
-      font-size: 28px;
-    }
     .subtitle {
       font-size: 15px;
     }
@@ -512,10 +499,9 @@
     <span>April 2026</span>
   </div>
 
-  <div class="wordmark">
+  <h1 class="wordmark">
     <img src="talent-plus-logo.png" width="375" height="120" alt="Talent+" decoding="async">
-  </div>
-  <h1 class="title">Talent<span class="plus">+</span></h1>
+  </h1>
   <p class="subtitle">UNOPS&rsquo; talent technology and how the pieces fit together.</p>
 
   <div class="prose">
